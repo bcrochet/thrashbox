@@ -19,6 +19,7 @@ neovim
 npm
 plocate
 ripgrep
+sssd-client
 speedtest-cli
 starship
 wl-clipboard
