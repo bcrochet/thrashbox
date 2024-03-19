@@ -21,7 +21,7 @@ RUN rpm -Uvh https://github.com/twpayne/chezmoi/releases/download/v2.47.1/chezmo
 
 # RUN curl -sSL https://github.com/Slackadays/Clipboard/raw/main/install.sh | sh
 # First, let's download the code and go a nice place to build everything.
-RUN dnf install -y cmake make alsa-lib alsa-lib-devel && \
+RUN dnf install -y cmake make alsa-lib alsa-lib-devel openssl-devel && \
     cd $(mktemp -d) && \
     git clone https://github.com/Slackadays/Clipboard && \
     cd Clipboard/build && \
@@ -30,7 +30,7 @@ RUN dnf install -y cmake make alsa-lib alsa-lib-devel && \
     cmake --install . && \
     cd ../.. && \
     rm -rf Clipboard && \
-    dnf remove -y cmake make alsa-lib-devel && \
+    dnf remove -y cmake make alsa-lib-devel openssl-devel && \
     dnf clean all
 
 RUN   ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/docker && \
