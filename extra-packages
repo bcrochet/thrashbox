@@ -5,17 +5,16 @@ bat
 dbus-x11
 direnv
 eza
-ffmpeg
+# ffmpeg
 fzf
 gh
 git-credential-libsecret
-helix
+# helix
 just
 make
 micro
 mosh
 ncdu
-neofetch
 neovim
 npm
 plocate
