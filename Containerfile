@@ -1,4 +1,4 @@
-FROM quay.io/fedora/fedora-toolbox:latest
+FROM registry.fedoraproject.org/fedora-toolbox:41
 
 LABEL com.github.containers.toolbox="true" \
       usage="This image is meant to be used with the toolbox or distrobox command" \
@@ -14,14 +14,9 @@ RUN dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-rele
     dnf config-manager setopt fedora-cisco-openh264.enabled=true && \
     dnf copr enable -y varlad/zellij  && \
     dnf upgrade -y && \
-    grep -v '^#' /extra-packages | xargs dnf install -y
-RUN rm /extra-packages
-
-RUN rpm -Uvh https://github.com/twpayne/chezmoi/releases/download/v2.47.1/chezmoi-2.47.1-x86_64.rpm
-
-# RUN curl -sSL https://github.com/Slackadays/Clipboard/raw/main/install.sh | sh
+    grep -v '^#' /extra-packages | xargs dnf install -y && \
 # First, let's download the code and go a nice place to build everything.
-RUN dnf install -y cmake make alsa-lib alsa-lib-devel openssl-devel && \
+    dnf install -y cmake make alsa-lib alsa-lib-devel openssl-devel && \
     cd $(mktemp -d) && \
     git clone https://github.com/Slackadays/Clipboard && \
     cd Clipboard/build && \
@@ -32,10 +27,12 @@ RUN dnf install -y cmake make alsa-lib alsa-lib-devel openssl-devel && \
     rm -rf Clipboard && \
     dnf remove -y cmake make alsa-lib-devel openssl-devel && \
     dnf clean all
+RUN rm /extra-packages
 
-RUN   ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/docker && \
-      ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \ 
-      ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/podman && \
-      ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/rpm-ostree && \
-      ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/transactional-update
-     
+
+#RUN   ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/docker && \
+#      ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \ 
+#      ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/podman && \
+#      ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/rpm-ostree && \
+#      ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/transactional-update
+#

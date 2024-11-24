@@ -8,7 +8,6 @@ eza
 # ffmpeg
 fzf
 gh
-git-credential-libsecret
 # helix
 just
 make
@@ -26,4 +25,7 @@ wl-clipboard
 zellij
 zsh
 zstd
+
+# packages from http
+https://github.com/twpayne/chezmoi/releases/download/v2.54.0/chezmoi-2.54.0-x86_64.rpm
 
