@@ -12,7 +12,7 @@ on:
       - '**/README.md'
 env:
     IMAGE_NAME: thrashbox
-    IMAGE_TAGS: latest 40
+    IMAGE_TAGS: latest 41
     IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
 
 jobs:
