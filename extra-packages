@@ -10,15 +10,18 @@ fzf
 gh
 # helix
 just
+krb5-workstation
 make
 micro
 mosh
 ncdu
 neovim
 npm
+pam_krb5
 plocate
 ripgrep
 sssd-client
+sssd-krb5
 speedtest-cli
 starship
 wl-clipboard
