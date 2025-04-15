@@ -4,7 +4,7 @@ btop
 bat
 dbus-x11
 direnv
-eza
+# eza
 # ffmpeg
 fzf
 gh

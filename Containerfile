@@ -29,7 +29,12 @@ RUN dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-rele
     dnf clean all
 RUN rm /extra-packages
 
-
+RUN mkdir /tmp/eza && cd /tmp/eza && \
+    curl -OL https://github.com/eza-community/eza/releases/download/v0.21.0/eza_x86_64-unknown-linux-gnu.tar.gz \
+    && tar xzf eza_x86_64-unknown-linux-gnu.tar.gz \
+    && mv eza /usr/local/bin \
+    && cd \
+    && rm -rf /tmp/eza
 #RUN   ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/docker && \
 #      ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \ 
 #      ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/podman && \
