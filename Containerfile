@@ -1,21 +1,21 @@
-FROM registry.fedoraproject.org/fedora-toolbox:41
+FROM registry.fedoraproject.org/fedora-toolbox:42
 
 LABEL com.github.containers.toolbox="true" \
-      usage="This image is meant to be used with the toolbox or distrobox command" \
-      summary="A cloud-native terminal experience" \
-      maintainer="brad@crochet.net"
+    usage="This image is meant to be used with the toolbox or distrobox command" \
+    summary="A cloud-native terminal experience" \
+    maintainer="brad@crochet.net"
 COPY extra-packages /
 COPY etc /etc
 
 RUN dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
-                   https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm && \
+    https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm && \
     dnf config-manager addrepo --from-repofile=https://cli.github.com/packages/rpm/gh-cli.repo && \
     dnf config-manager addrepo --from-repofile=https://copr.fedorainfracloud.org/coprs/atim/starship/repo/fedora-$(rpm -E %fedora)/atim-starship-fedora-$(rpm -E %fedora).repo && \
     dnf config-manager setopt fedora-cisco-openh264.enabled=true && \
     dnf copr enable -y varlad/zellij  && \
     dnf upgrade -y && \
     grep -v '^#' /extra-packages | xargs dnf install -y && \
-# First, let's download the code and go a nice place to build everything.
+    # First, let's download the code and go a nice place to build everything.
     dnf install -y cmake make alsa-lib alsa-lib-devel openssl-devel && \
     cd $(mktemp -d) && \
     git clone https://github.com/Slackadays/Clipboard && \
