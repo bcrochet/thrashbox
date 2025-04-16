@@ -1,3 +1,20 @@
+FROM registry.fedoraproject.org/fedora-toolbox:42 as clipboard-builder
+
+RUN \
+    # First, let's download the code and go a nice place to build everything. \
+    dnf install -y cmake make alsa-lib alsa-lib-devel openssl-devel gcc-c++ && \
+    cd $(mktemp -d) && \
+    git clone https://github.com/Slackadays/Clipboard && \
+    cd Clipboard/build && \
+    cmake -DCMAKE_BUILD_TYPE=Release .. && \
+    cmake --build . -j 12 && \
+    cmake --install .
+
+FROM registry.fedoraproject.org/fedora-toolbox:42 as eza-install
+RUN cd /tmp && \
+    curl -OL https://github.com/eza-community/eza/releases/download/v0.21.0/eza_x86_64-unknown-linux-gnu.tar.gz \
+    && tar xzf eza_x86_64-unknown-linux-gnu.tar.gz 
+
 FROM registry.fedoraproject.org/fedora-toolbox:42
 
 LABEL com.github.containers.toolbox="true" \
@@ -7,6 +24,9 @@ LABEL com.github.containers.toolbox="true" \
 COPY extra-packages /
 COPY etc /etc
 
+COPY --from=clipboard-builder /usr/local/bin/cb /usr/local/bin/cb
+COPY --from=eza-install /tmp/eza /usr/local/bin/eza
+
 RUN dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
     https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm && \
     dnf config-manager addrepo --from-repofile=https://cli.github.com/packages/rpm/gh-cli.repo && \
@@ -15,26 +35,9 @@ RUN dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-rele
     dnf copr enable -y varlad/zellij  && \
     dnf upgrade -y && \
     grep -v '^#' /extra-packages | xargs dnf install -y && \
-    # First, let's download the code and go a nice place to build everything.
-    dnf install -y cmake make alsa-lib alsa-lib-devel openssl-devel && \
-    cd $(mktemp -d) && \
-    git clone https://github.com/Slackadays/Clipboard && \
-    cd Clipboard/build && \
-    cmake -DCMAKE_BUILD_TYPE=Release .. && \
-    cmake --build . -j 12 && \
-    cmake --install . && \
-    cd ../.. && \
-    rm -rf Clipboard && \
-    dnf remove -y cmake make alsa-lib-devel openssl-devel && \
     dnf clean all
 RUN rm /extra-packages
 
-RUN mkdir /tmp/eza && cd /tmp/eza && \
-    curl -OL https://github.com/eza-community/eza/releases/download/v0.21.0/eza_x86_64-unknown-linux-gnu.tar.gz \
-    && tar xzf eza_x86_64-unknown-linux-gnu.tar.gz \
-    && mv eza /usr/local/bin \
-    && cd \
-    && rm -rf /tmp/eza
 #RUN   ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/docker && \
 #      ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \ 
 #      ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/podman && \
