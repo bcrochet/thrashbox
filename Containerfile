@@ -1,4 +1,4 @@
-FROM registry.fedoraproject.org/fedora-toolbox:42 as clipboard-builder
+FROM registry.fedoraproject.org/fedora-toolbox:43 as clipboard-builder
 
 RUN \
     # First, let's download the code and go a nice place to build everything. \
@@ -10,12 +10,12 @@ RUN \
     cmake --build . -j 12 && \
     cmake --install .
 
-FROM registry.fedoraproject.org/fedora-toolbox:42 as eza-install
+FROM registry.fedoraproject.org/fedora-toolbox:43 as eza-install
 RUN cd /tmp && \
     curl -OL https://github.com/eza-community/eza/releases/download/v0.21.0/eza_x86_64-unknown-linux-gnu.tar.gz \
     && tar xzf eza_x86_64-unknown-linux-gnu.tar.gz 
 
-FROM registry.fedoraproject.org/fedora-toolbox:42
+FROM registry.fedoraproject.org/fedora-toolbox:43
 
 LABEL com.github.containers.toolbox="true" \
     usage="This image is meant to be used with the toolbox or distrobox command" \
