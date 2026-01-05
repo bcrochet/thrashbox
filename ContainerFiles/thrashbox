@@ -1,0 +1,36 @@
+FROM quay.io/fedora/fedora-toolbox:latest as clipboard-builder
+
+RUN \
+    # First, let's download the code and go a nice place to build everything. \
+    dnf install -y cmake make alsa-lib alsa-lib-devel openssl-devel gcc-c++ && \
+    cd $(mktemp -d) && \
+    git clone https://github.com/Slackadays/Clipboard && \
+    cd Clipboard/build && \
+    cmake -DCMAKE_BUILD_TYPE=Release .. && \
+    cmake --build . -j 12 && \
+    cmake --install .
+
+FROM quay.io/fedora/fedora-toolbox:latest as eza-install
+RUN cd /tmp && \
+    curl -OL https://github.com/eza-community/eza/releases/latest/download/eza_x86_64-unknown-linux-gnu.tar.gz \
+    && tar xzf eza_x86_64-unknown-linux-gnu.tar.gz 
+
+FROM quay.io/fedora/fedora-toolbox:latest
+
+# Copy the setup scripts and package list
+COPY ../scripts/thrashbox.sh /
+COPY ../scripts/distrobox-shims.sh /
+COPY ../packages/thrashbox.packages /
+
+LABEL com.github.containers.toolbox="true" \
+    usage="This image is meant to be used with the toolbox or distrobox command" \
+    summary="A cloud-native terminal experience" \
+    maintainer="brad@crochet.net"
+
+COPY --from=clipboard-builder /usr/local/bin/cb /usr/local/bin/cb
+COPY --from=eza-install /tmp/eza /usr/local/bin/eza
+
+# Run the setup scripts
+RUN chmod +x thrashbox.sh distrobox-shims.sh && /thrashbox.sh
+RUN rm /thrashbox.sh /distrobox-shims.sh /thrashbox.packages
+

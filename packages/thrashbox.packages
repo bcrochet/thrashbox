@@ -1,0 +1,36 @@
+age
+# atuin
+btop
+bat
+dbus-x11
+direnv
+# eza
+fastfetch
+# ffmpeg
+fzf
+gh
+# helix
+jq
+just
+krb5-workstation
+make
+micro
+mosh
+ncdu
+neovim
+npm
+pam_krb5
+plocate
+ripgrep
+sssd-client
+sssd-krb5
+speedtest-cli
+starship
+wl-clipboard
+zellij
+zsh
+zstd
+
+# packages from http
+https://github.com/twpayne/chezmoi/releases/download/v2.54.0/chezmoi-2.54.0-x86_64.rpm
+
