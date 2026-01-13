@@ -9,6 +9,7 @@ fastfetch
 # ffmpeg
 fzf
 gh
+git-delta
 # helix
 jq
 just
